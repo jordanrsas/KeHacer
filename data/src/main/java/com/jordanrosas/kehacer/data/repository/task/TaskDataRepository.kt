@@ -13,4 +13,24 @@ class TaskDataRepository(private val taskCacheSource: TaskCacheSource) : TaskRep
             return@map mapper.mapFrom(it)
         }
     }
+
+    override fun update(task: TaskDto) {
+        val mapper = TaskRealMapper()
+        taskCacheSource.update(mapper.mapTo(task))
+    }
+
+    override fun delete(id: Int) {
+        taskCacheSource.delete(id)
+    }
+
+    override fun getTaskList(): Single<List<TaskDto>> {
+        val mapper = TaskRealMapper()
+        return taskCacheSource.getTaskList().map { listTaskRealm ->
+            val listTask = ArrayList<TaskDto>()
+            listTaskRealm.forEach {
+                listTask.add(mapper.mapFrom(it))
+            }
+            return@map listTask
+        }
+    }
 }

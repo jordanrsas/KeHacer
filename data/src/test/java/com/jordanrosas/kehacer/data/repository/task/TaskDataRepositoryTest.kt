@@ -1,5 +1,6 @@
 package com.jordanrosas.kehacer.data.repository.task
 
+import com.jordanrosas.kehacer.data.cache.entities.TaskRealmEntity
 import com.jordanrosas.kehacer.data.mapper.TaskRealMapper
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
 import io.reactivex.Single
@@ -25,13 +26,34 @@ class TaskDataRepositoryTest {
     }
 
     @Test
-    fun `Test insert`() {
+    fun `Test insert Task`() {
         val mapper = TaskRealMapper()
         val taskRealEntity = taskMocks.getTaskRealEntity()
         val taskDto = taskMocks.getTaskDto()
         Mockito.`when`(taskCacheSource.insert(taskRealEntity)).thenReturn(
             Single.just(mapper.mapTo(taskDto))
         )
-        taskRepository.insert(taskDto).test().assertNoErrors().assertComplete()
+        taskRepository.insert(taskDto)
+            .test()
+            .assertNoErrors()
+            .assertComplete()
+    }
+
+    @Test
+    fun `Test get Task List`() {
+        val mapper = TaskRealMapper()
+        val taskListDto = taskMocks.getTaskDtoList()
+        val taskRealmList = ArrayList<TaskRealmEntity>()
+        taskListDto.forEach {
+            taskRealmList.add(mapper.mapTo(it))
+        }
+
+        Mockito.`when`(taskCacheSource.getTaskList()).thenReturn(
+            Single.just(taskRealmList)
+        )
+        taskRepository.getTaskList()
+            .test()
+            .assertNoErrors()
+            .assertComplete()
     }
 }

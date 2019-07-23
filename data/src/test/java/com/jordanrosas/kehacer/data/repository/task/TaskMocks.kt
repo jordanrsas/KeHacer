@@ -22,4 +22,25 @@ class TaskMocks {
         "19:00"
     )
 
+    fun getTaskRealEntityList(): List<TaskRealmEntity> {
+        val taskRealmEntityList = ArrayList<TaskRealmEntity>()
+        taskRealmEntityList.add(getTaskRealEntity())
+        taskRealmEntityList.add(getTaskRealEntity())
+        taskRealmEntityList.add(getTaskRealEntity())
+        taskRealmEntityList.add(getTaskRealEntity())
+        taskRealmEntityList.add(getTaskRealEntity())
+        taskRealmEntityList.add(getTaskRealEntity())
+        return taskRealmEntityList
+    }
+
+    fun getTaskDtoList(): List<TaskDto> {
+        val taskDtoList = ArrayList<TaskDto>()
+        taskDtoList.add(getTaskDto())
+        taskDtoList.add(getTaskDto())
+        taskDtoList.add(getTaskDto())
+        taskDtoList.add(getTaskDto())
+        taskDtoList.add(getTaskDto())
+        taskDtoList.add(getTaskDto())
+        return taskDtoList
+    }
 }

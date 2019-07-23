@@ -5,4 +5,7 @@ import io.reactivex.Single
 
 interface TaskCacheSource {
     fun insert(taskRealmEntity: TaskRealmEntity): Single<TaskRealmEntity>
+    fun update(taskRealmEntity: TaskRealmEntity)
+    fun delete(id: Int)
+    fun getTaskList(): Single<List<TaskRealmEntity>>
 }
