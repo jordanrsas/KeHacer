@@ -3,6 +3,7 @@ package com.jordanrosas.kehacer.data.repository.task
 import com.jordanrosas.kehacer.data.cache.entities.TaskRealmEntity
 import com.jordanrosas.kehacer.data.mapper.TaskRealMapper
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -52,6 +53,30 @@ class TaskDataRepositoryTest {
             Single.just(taskRealmList)
         )
         taskRepository.getTaskList()
+            .test()
+            .assertNoErrors()
+            .assertComplete()
+    }
+
+    @Test
+    fun `Test update Task`() {
+        val mapper = TaskRealMapper()
+        val taskDto = taskMocks.getTaskDto()
+        Mockito.`when`(taskCacheSource.update(mapper.mapTo(taskDto)))
+            .thenReturn(Completable.complete())
+
+        taskRepository.update(taskDto)
+            .test()
+            .assertNoErrors()
+            .assertComplete()
+    }
+
+    @Test
+    fun `Test delete Task`() {
+        Mockito.`when`(taskCacheSource.delete(1))
+            .thenReturn(Completable.complete())
+
+        taskRepository.delete(1)
             .test()
             .assertNoErrors()
             .assertComplete()
