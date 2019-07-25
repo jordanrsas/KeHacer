@@ -4,6 +4,7 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation domainDependencies.values()
+    testImplementation domainTestDependencies.values()
 }
 
 sourceCompatibility = "7"

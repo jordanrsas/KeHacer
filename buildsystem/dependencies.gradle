@@ -50,9 +50,11 @@ ext {
     ]
 
     domainTestDependencies = [
-            junit  : "junit:junit:${jUnitVersion}",
-            mockito: "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}",
-            assertj: "org.assertj:assertj-core:${assertJVersion}"
+            junit      : "junit:junit:${jUnitVersion}",
+            kotlinJUnit: "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}",
+            assertj    : "org.assertj:assertj-core:${assertJVersion}",
+            mockitoCore: "org.mockito:mockito-core:${mockitoCoreVersion}",
+            mockito    : "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockito2}",
     ]
 
     presentationDependencies = [
@@ -94,7 +96,7 @@ ext {
             androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}",
             retrofit          : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             retrofitConverter : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
-            rxJava         : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            rxJava            : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             retrofitAdapter   : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
     ]
 
