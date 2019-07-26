@@ -7,6 +7,10 @@ import com.jordanrosas.kehacer.domain.model.TaskDto
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
 import io.reactivex.Single
 
+/**
+ * @property taskDataRepository TaskRepository
+ * @constructor
+ */
 class InsertTask(
     private val taskDataRepository: TaskRepository,
     threadExecutor: ThreadExecutor,
