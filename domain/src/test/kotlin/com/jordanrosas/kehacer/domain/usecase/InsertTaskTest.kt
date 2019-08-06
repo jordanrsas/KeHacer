@@ -23,9 +23,10 @@ class InsertTaskTest {
     private lateinit var taskMocks: TaskMocks
 
     @Before
-    fun initialize() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
-        Mockito.`when`(postExecutionThread.getScheduler()).thenReturn(Schedulers.trampoline())
+        Mockito.`when`(postExecutionThread.getScheduler())
+            .thenReturn(Schedulers.trampoline())
 
         insertTaskTest = InsertTask(
             taskDataRepository,
