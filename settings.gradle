@@ -1,1 +1,1 @@
-include ':kehacer-ui', ':presentation', ':domain', ':data', ':cache', ':remote'
+include ':kehacer-ui', ':domain', ':data'
