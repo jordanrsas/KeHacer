@@ -27,11 +27,34 @@ class TaskCacheDataSource(private val dataBaseManager: DataBaseManager) : TaskCa
     }
 
     override fun update(taskRealmEntity: TaskRealmEntity): Completable {
+        return Completable.create { emitter ->
+            dataBaseManager.getInstance().use {
+                it.copyToRealmOrUpdate(taskRealmEntity)
+                emitter.onComplete()
+            }
+        }
     }
 
     override fun delete(id: Int): Completable {
+        return Completable.create { emitter ->
+            dataBaseManager.getInstance().use {
+                val result = it.where(TaskRealmEntity::class.java).equalTo("id", id).findAll()
+                result.deleteAllFromRealm()
+                emitter.onComplete()
+            }
+        }
     }
 
     override fun getTaskList(): Single<List<TaskRealmEntity>> {
+        return Single.create { emitter ->
+            dataBaseManager.getInstance().use {
+                val result = it.where(TaskRealmEntity::class.java).findAll()
+                if (result != null) {
+                    emitter.onSuccess(it.copyFromRealm(result))
+                } else {
+                    emitter.onError(Throwable("No Tasks"))
+                }
+            }
+        }
     }
 }

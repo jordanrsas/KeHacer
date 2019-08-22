@@ -20,7 +20,7 @@ class RealmDataBaseManager : DataBaseManager {
         }
     }
 
-    override fun getInstance() =
+    override fun getInstance(): Realm =
         Realm.getDefaultInstance()
 
 }

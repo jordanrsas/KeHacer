@@ -6,14 +6,14 @@ import com.jordanrosas.kehacer.domain.model.TaskDto
 
 class TaskRealMapper : TransformMapper<TaskDto, TaskRealmEntity> {
     override fun mapTo(value: TaskDto): TaskRealmEntity {
-        return TaskRealmEntity(
-            value.id,
-            value.title,
-            value.task,
-            value.category,
-            value.date,
-            value.time
-        )
+        return TaskRealmEntity().apply {
+            id = value.id
+            title = value.title
+            task = value.task
+            category = value.category
+            date = value.date
+            time = value.time
+        }
     }
 
     override fun mapFrom(value: TaskRealmEntity): TaskDto {
