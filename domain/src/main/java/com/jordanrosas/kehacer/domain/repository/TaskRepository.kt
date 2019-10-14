@@ -1,12 +1,12 @@
 package com.jordanrosas.kehacer.domain.repository
 
 import com.jordanrosas.kehacer.domain.model.TaskDto
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Observable
 
 interface TaskRepository {
-    fun insert(task: TaskDto): Single<TaskDto>
-    fun update(task: TaskDto): Completable
-    fun delete(id: Int): Completable
-    fun getTaskList(): Single<List<TaskDto>>
+    fun fromRemote(isRemote: Boolean)
+    fun insert(task: TaskDto): Observable<TaskDto>
+    fun update(task: TaskDto): Observable<Boolean>
+    fun delete(id: Int): Observable<Boolean>
+    fun getTaskList(): Observable<List<TaskDto>>
 }

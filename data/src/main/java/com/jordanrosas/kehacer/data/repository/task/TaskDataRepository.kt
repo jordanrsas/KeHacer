@@ -1,37 +1,55 @@
 package com.jordanrosas.kehacer.data.repository.task
 
-import com.jordanrosas.kehacer.data.mapper.TaskRealMapper
+import com.jordanrosas.kehacer.data.mapper.TaskDataMapper
 import com.jordanrosas.kehacer.domain.model.TaskDto
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Observable
 
-class TaskDataRepository(private val taskCacheSource: TaskCacheSource) : TaskRepository {
+class TaskDataRepository(
+    private val taskDataFactory: TaskDataFactory
+) : TaskRepository {
 
-    override fun insert(task: TaskDto): Single<TaskDto> {
-        val mapper = TaskRealMapper()
-        return taskCacheSource.insert(mapper.mapTo(task)).map {
-            return@map mapper.mapFrom(it)
-        }
+    private val taskMapper = TaskDataMapper()
+    private var isRemote = false
+
+    override fun fromRemote(isRemote: Boolean) {
+        this.isRemote = isRemote
     }
 
-    override fun update(task: TaskDto): Completable {
-        val mapper = TaskRealMapper()
-        return taskCacheSource.update(mapper.mapTo(task))
-    }
+    override fun insert(task: TaskDto): Observable<TaskDto> {
+        val taskEntity = taskMapper.mapFrom(task)
 
-    override fun delete(id: Int): Completable {
-        return taskCacheSource.delete(id)
-    }
-
-    override fun getTaskList(): Single<List<TaskDto>> {
-        val mapper = TaskRealMapper()
-        return taskCacheSource.getTaskList().map { listTaskRealm ->
-            val listTask = ArrayList<TaskDto>()
-            listTaskRealm.forEach {
-                listTask.add(mapper.mapFrom(it))
+        return taskDataFactory
+            .create(isRemote)
+            .insert(taskEntity)
+            .map {
+                return@map taskMapper.mapTo(it)
             }
-            return@map listTask
-        }
+    }
+
+    override fun update(task: TaskDto): Observable<Boolean> {
+        val taskEntity = taskMapper.mapFrom(task)
+        return taskDataFactory
+            .create(isRemote)
+            .update(taskEntity)
+    }
+
+    override fun delete(id: Int): Observable<Boolean> {
+        return taskDataFactory
+            .create(isRemote)
+            .delete(id)
+    }
+
+    override fun getTaskList(): Observable<List<TaskDto>> {
+        return taskDataFactory
+            .create(isRemote)
+            .getTaskList()
+            .map { listTaskEntity ->
+                val listTaskDto = ArrayList<TaskDto>()
+                listTaskEntity.forEach {
+                    listTaskDto.add(taskMapper.mapTo(it))
+                }
+                return@map listTaskDto
+            }
     }
 }

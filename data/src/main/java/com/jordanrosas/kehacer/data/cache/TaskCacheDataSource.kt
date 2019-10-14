@@ -2,12 +2,12 @@ package com.jordanrosas.kehacer.data.cache
 
 import com.jordanrosas.kehacer.data.cache.entities.TaskRealmEntity
 import com.jordanrosas.kehacer.data.manager.DataBaseManager
-import com.jordanrosas.kehacer.data.repository.task.TaskCacheSource
 import io.reactivex.Completable
 import io.reactivex.Single
 
-class TaskCacheDataSource(private val dataBaseManager: DataBaseManager) : TaskCacheSource {
-
+class TaskCacheDataSource(
+    private val dataBaseManager: DataBaseManager
+) : TaskCacheSource {
 
     /*
     Roboelectric
@@ -38,9 +38,15 @@ class TaskCacheDataSource(private val dataBaseManager: DataBaseManager) : TaskCa
     override fun delete(id: Int): Completable {
         return Completable.create { emitter ->
             dataBaseManager.getInstance().use {
-                val result = it.where(TaskRealmEntity::class.java).equalTo("id", id).findAll()
-                result.deleteAllFromRealm()
-                emitter.onComplete()
+                val result = it.where(TaskRealmEntity::class.java)
+                    .equalTo("id", id)
+                    .findAll()
+                if (result.isNotEmpty()) {
+                    result.deleteAllFromRealm()
+                    emitter.onComplete()
+                } else {
+                    emitter.onError(Throwable("Tasks Not Found"))
+                }
             }
         }
     }
@@ -55,6 +61,12 @@ class TaskCacheDataSource(private val dataBaseManager: DataBaseManager) : TaskCa
                     emitter.onError(Throwable("No Tasks"))
                 }
             }
+        }
+    }
+
+    override fun save(taskRealmEntity: TaskRealmEntity) {
+        dataBaseManager.getInstance().use {
+            it.copyToRealmOrUpdate(taskRealmEntity)
         }
     }
 }

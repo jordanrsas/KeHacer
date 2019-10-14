@@ -1,5 +1,6 @@
 package com.jordanrosas.kehacer.data.repository.task
 
+import com.jordanrosas.kehacer.data.cache.TaskCacheSource
 import com.jordanrosas.kehacer.data.cache.entities.TaskRealmEntity
 import com.jordanrosas.kehacer.data.mapper.TaskRealMapper
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
@@ -28,16 +29,19 @@ class TaskDataRepositoryTest {
 
     @Test
     fun `Test insert Task`() {
-        val mapper = TaskRealMapper()
-        val taskRealEntity = taskMocks.getTaskRealEntity()
         val taskDto = taskMocks.getTaskDto()
-        Mockito.`when`(taskCacheSource.insert(taskRealEntity)).thenReturn(
-            Single.just(mapper.mapTo(taskDto))
+        Mockito.`when`(taskCacheSource.insert(anyObjectOrArgument())).thenReturn(
+            Single.just(TaskRealmEntity())
         )
         taskRepository.insert(taskDto)
             .test()
             .assertNoErrors()
             .assertComplete()
+    }
+
+   private fun <T> anyObjectOrArgument(): T {
+        Mockito.any<T>()
+        return null as T
     }
 
     @Test
@@ -60,9 +64,8 @@ class TaskDataRepositoryTest {
 
     @Test
     fun `Test update Task`() {
-        val mapper = TaskRealMapper()
         val taskDto = taskMocks.getTaskDto()
-        Mockito.`when`(taskCacheSource.update(mapper.mapTo(taskDto)))
+        Mockito.`when`(taskCacheSource.update(anyObjectOrArgument()))
             .thenReturn(Completable.complete())
 
         taskRepository.update(taskDto)
