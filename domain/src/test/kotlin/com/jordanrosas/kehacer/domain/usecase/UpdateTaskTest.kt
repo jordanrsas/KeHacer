@@ -2,7 +2,7 @@ package com.jordanrosas.kehacer.domain.usecase
 
 import com.jordanrosas.kehacer.domain.executor.PostExecutionThread
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
-import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
@@ -40,8 +40,8 @@ class UpdateTaskTest {
         val taskDto = taskMocks.getTaskDto()
 
         Mockito.`when`(taskDataRepository.update(taskDto))
-            .thenReturn(Completable.complete())
-        updateTaskTest.execute(taskDto)
+            .thenReturn(Observable.just(true))
+        updateTaskTest.observable(taskDto)
             .test()
             .assertNoErrors()
             .assertComplete()
@@ -52,9 +52,9 @@ class UpdateTaskTest {
         val taskDto = taskMocks.getTaskDto()
 
         Mockito.`when`(taskDataRepository.update(taskDto))
-            .thenReturn(Completable.error(Exception()))
+            .thenReturn(Observable.error(Exception()))
 
-        updateTaskTest.execute(taskDto)
+        updateTaskTest.observable(taskDto)
             .test()
             .assertError { error ->
                 error is Exception

@@ -3,6 +3,7 @@ package com.jordanrosas.kehacer.domain.usecase
 import com.jordanrosas.kehacer.domain.executor.PostExecutionThread
 import com.jordanrosas.kehacer.domain.model.TaskDto
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.junit.Before
@@ -42,9 +43,9 @@ class InsertTaskTest {
         val taskDto = taskMocks.getTaskDto()
 
         Mockito.`when`(taskDataRepository.insert(taskDto))
-            .thenReturn(Single.just(taskDto))
+            .thenReturn(Observable.just(taskDto))
 
-        insertTaskTest.execute(taskDto)
+        insertTaskTest.observable(taskDto)
             .test()
             .assertNoErrors()
             .assertComplete()
@@ -53,7 +54,7 @@ class InsertTaskTest {
     @Test
     fun `Insert Task Error`() {
         val taskDto: TaskDto? = null
-        insertTaskTest.execute(taskDto)
+        insertTaskTest.observable(taskDto)
             .test()
             .assertError { error ->
                 error is Exception
@@ -65,9 +66,9 @@ class InsertTaskTest {
         val taskDto = taskMocks.getTaskDto()
 
         Mockito.`when`(taskDataRepository.insert(taskDto))
-            .thenReturn(Single.just(taskDto))
+            .thenReturn(Observable.just(taskDto))
 
-        insertTaskTest.execute(taskDto)
+        insertTaskTest.observable(taskDto)
             .test()
             .assertNoErrors()
             .assertComplete()

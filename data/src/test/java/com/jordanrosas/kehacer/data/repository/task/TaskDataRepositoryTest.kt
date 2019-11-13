@@ -16,6 +16,8 @@ class TaskDataRepositoryTest {
 
     @Mock
     private lateinit var taskCacheSource: TaskCacheSource
+    @Mock
+    private lateinit var taskServices: TaskServices
 
     private lateinit var taskRepository: TaskRepository
     private lateinit var taskMocks: TaskMocks
@@ -24,7 +26,9 @@ class TaskDataRepositoryTest {
     fun initialize() {
         MockitoAnnotations.initMocks(this)
         taskMocks = TaskMocks()
-        taskRepository = TaskDataRepository(taskCacheSource)
+        taskRepository = TaskDataRepository(
+            TaskDataFactory(taskServices, taskCacheSource)
+        )
     }
 
     @Test
@@ -39,7 +43,7 @@ class TaskDataRepositoryTest {
             .assertComplete()
     }
 
-   private fun <T> anyObjectOrArgument(): T {
+    private fun <T> anyObjectOrArgument(): T {
         Mockito.any<T>()
         return null as T
     }
@@ -47,7 +51,7 @@ class TaskDataRepositoryTest {
     @Test
     fun `Test get Task List`() {
         val mapper = TaskRealMapper()
-        val taskListDto = taskMocks.getTaskDtoList()
+        val taskListDto = taskMocks.getTaskListEntity()
         val taskRealmList = ArrayList<TaskRealmEntity>()
         taskListDto.forEach {
             taskRealmList.add(mapper.mapTo(it))

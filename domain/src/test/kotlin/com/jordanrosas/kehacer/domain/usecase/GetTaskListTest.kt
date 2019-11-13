@@ -2,7 +2,7 @@ package com.jordanrosas.kehacer.domain.usecase
 
 import com.jordanrosas.kehacer.domain.executor.PostExecutionThread
 import com.jordanrosas.kehacer.domain.repository.TaskRepository
-import io.reactivex.Single
+import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
@@ -39,9 +39,9 @@ class GetTaskListTest {
     fun `Test Get Task List Result`() {
         val taskdtoList = taskMocks.getTaskDtoList()
         Mockito.`when`(taskDataRepository.getTaskList())
-            .thenReturn(Single.just(taskdtoList))
+            .thenReturn(Observable.just(taskdtoList))
 
-        getTaskList.execute()
+        getTaskList.observable()
             .test()
             .assertNoErrors()
             .assertComplete()
@@ -50,9 +50,9 @@ class GetTaskListTest {
     @Test
     fun `Test Get Task List Error Result`() {
         Mockito.`when`(taskDataRepository.getTaskList())
-            .thenReturn(Single.error(Exception()))
+            .thenReturn(Observable.error(Exception()))
 
-        getTaskList.execute()
+        getTaskList.observable()
             .test()
             .assertError { error ->
                 error is Exception
@@ -63,9 +63,9 @@ class GetTaskListTest {
     fun `Test Get Task List With Values`() {
         val taskdtoList = taskMocks.getTaskDtoList()
         Mockito.`when`(taskDataRepository.getTaskList())
-            .thenReturn(Single.just(taskdtoList))
+            .thenReturn(Observable.just(taskdtoList))
 
-        getTaskList.execute()
+        getTaskList.observable()
             .test()
             .assertNoErrors()
             .assertComplete()
