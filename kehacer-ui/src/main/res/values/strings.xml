@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">KeHacer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="category">Categorias</string>
+    <string name="history">Historial</string>
+    <string name="communicate">Comuncícate</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="share_app">Comparte App</string>
 </resources>

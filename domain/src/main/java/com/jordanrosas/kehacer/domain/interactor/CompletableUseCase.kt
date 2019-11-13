@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
  * @constructor
  */
 abstract class CompletableUseCase<Params>(
-    val threadExecutor: ThreadExecutor,
+    private val threadExecutor: ThreadExecutor,
     val postExecutionThread: PostExecutionThread
 ) : UseCase<Params, Completable>() {
 

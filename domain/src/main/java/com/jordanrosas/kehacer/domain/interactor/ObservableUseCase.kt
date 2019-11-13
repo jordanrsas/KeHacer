@@ -6,7 +6,7 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 abstract class ObservableUseCase<Params, T> (
-    val threadExecutor: ThreadExecutor,
+    private val threadExecutor: ThreadExecutor,
     val postExecutionThread: PostExecutionThread
 ) : UseCase<Params, Observable<T>>() {
 
